@@ -1,6 +1,8 @@
 # ---------------------------------------------------------- #
-# Delaunay triangulation
 #
+# PolygonPic
+#
+# Links:
 # https://docs.scipy.org/doc/scipy-0.14.0/reference/generated/scipy.spatial.Delaunay.html
 #
 # ---------------------------------------------------------- #
@@ -17,9 +19,12 @@ from scipy.spatial import Delaunay
 width = 600
 height = 800
 
+w_shift = width / 3   # !IMPORTANT
+h_shift = height / 4   # !IMPORTANT
+
 pygame.init()
 screen = pygame.display.set_mode((width, height), 0, 32)
-pygame.display.set_caption("_Polygon_Prototype_")
+pygame.display.set_caption("_polygonpic_prototype_")
 
 # ---------------------------------------------------------- #
 # Var
@@ -32,7 +37,7 @@ running = True
 print "Setup..."
 
 points_number = 70   # 70 !IMPORTANT
-dist_from_borders = 19   # !IMPORTANT
+dist_from_borders = 21   # !IMPORTANT
 
 X = np.random.randint(dist_from_borders, width - dist_from_borders, size=(points_number,))
 Y = np.random.randint(dist_from_borders, height - dist_from_borders, size=(points_number,))
@@ -40,7 +45,7 @@ Y = np.random.randint(dist_from_borders, height - dist_from_borders, size=(point
 point_cloud_list = zip(list(X), list(Y))
 point_cloud_list_new = point_cloud_list[:]
 
-distance_threshold = 70   # 70 !IMPORTANT
+distance_threshold = 77   # 70 !IMPORTANT
 
 # Combinations using for
 for p1 in point_cloud_list:
@@ -71,7 +76,7 @@ for c in combinations:
 point_cloud_list_new = list(set(point_cloud_list_new))
 """
 
-# Add corners
+# Add corners and borders | Manual | Need tuning
 # print point_cloud_list, point_cloud_list_new
 point_cloud_list.append((0, 0))
 point_cloud_list.append((0, height))
@@ -81,11 +86,35 @@ point_cloud_list_new.append((0, 0))
 point_cloud_list_new.append((0, height))
 point_cloud_list_new.append((width, 0))
 point_cloud_list_new.append((width, height))
+#
+point_cloud_list.append((0, h_shift))
+point_cloud_list.append((0, 2 * h_shift))
+point_cloud_list.append((0, 3 * h_shift))
+point_cloud_list_new.append((0, h_shift))
+point_cloud_list_new.append((0, 2 * h_shift))
+point_cloud_list_new.append((0, 3 * h_shift))
+#
+point_cloud_list.append((width, h_shift))
+point_cloud_list.append((width, 2 * h_shift))
+point_cloud_list.append((width, 3 * h_shift))
+point_cloud_list_new.append((width, h_shift))
+point_cloud_list_new.append((width, 2 * h_shift))
+point_cloud_list_new.append((width, 3 * h_shift))
+#
+point_cloud_list.append((w_shift, 0))
+point_cloud_list.append((w_shift * 2, 0))
+point_cloud_list_new.append((w_shift, 0))
+point_cloud_list_new.append((w_shift * 2, 0))
+#
+point_cloud_list.append((w_shift, height))
+point_cloud_list.append((w_shift * 2, height))
+point_cloud_list_new.append((w_shift, height))
+point_cloud_list_new.append((w_shift * 2, height))
 
 point_cloud = np.array(point_cloud_list)
 point_cloud_new = np.array(point_cloud_list_new)
 
-# Use not all pionts | !IMPORTANT
+# Use not all points | !IMPORTANT
 point_cloud = point_cloud_new
 point_cloud_list = point_cloud_list_new
 
@@ -155,4 +184,3 @@ while running:
 print "All stopped..."
 
 # -------------------------# 
-
