@@ -1,2 +1,5 @@
 # PolygonPic
-Polygonal images generator (Python)
+
+Polygonal images generator
+
+Delaunay triangulation
