@@ -30,6 +30,7 @@ pygame.display.set_caption("_polygonpic_prototype_")
 # Var
 
 running = True
+filled = True
 
 # ---------------------------------------------------------- #
 # Setup
@@ -130,12 +131,27 @@ tri_coords = point_cloud[tri.simplices]
 # ---------------------------------------------------------- #
 # Main
 
+# Color 1
+# c_const_list = [(0, 0, np.random.randint(70, 170), 255) for _ in xrange(tri_coords.shape[0])]
+# print tri_coords.shape[0], len(c_const_list), c_const_list
+
+# Color 2
+start_color = np.array((np.random.randint(0, 255), np.random.randint(0, 255), np.random.randint(0, 255), 255))
+end_color = np.array((np.random.randint(0, 255), np.random.randint(0, 255), np.random.randint(0, 255), 255))
+color_shift = (end_color - start_color) / (tri_coords.shape[0] * 1.0)
+# print start_color, end_color, (end_color - start_color), tri_coords.shape[0], color_shift
+c_const_list = [(int(np.clip((start_color[0] + color_shift[0] * i) + np.random.randint(-5, 5), 0, 255)),
+                 int(np.clip((start_color[1] + color_shift[1] * i) + np.random.randint(-5, 5), 0, 255)),
+                 int(np.clip((start_color[2] + color_shift[2] * i) + np.random.randint(-5, 5), 0, 255)),
+                 np.random.randint(170, 255)) for i in xrange(tri_coords.shape[0])]
+# print tri_coords.shape[0], len(c_const_list), c_const_list
+
 while running:
   
   # Delay
   # time.sleep(1)
   
-  screen.fill((0, 0, 0, 0))
+  screen.fill((0, 0, 0, 255))
   
   # ------------------ #
   # Tests
@@ -156,22 +172,40 @@ while running:
     pygame.gfxdraw.filled_circle(screen, p1[0], p1[1], 3, c)
   """
   # ------------------ #
-  
+
   for p in point_cloud_list:
-    c = (255, 255, 255, 255)
-    pygame.gfxdraw.filled_circle(screen, p[0], p[1], 5, c)
-  
+    if filled:
+      size_p = 1
+      c = (255, 255, 255, 100)
+    else:
+      size_p = 5
+      c = (255, 255, 255, 255)
+    pygame.gfxdraw.filled_circle(screen, p[0], p[1], size_p, c)
+
   for i in xrange(tri_coords.shape[0]):
-    # c = (0, 0, np.random.randint(70, 170), 255)
-    c = (255, 255, 255, 255)
-    # filled_trigon | aatrigon for borders only
-    pygame.gfxdraw.aatrigon(screen,
-                            tri_coords[i, :, :][0, 0], tri_coords[i, :, :][0, 1],
-                            tri_coords[i, :, :][1, 0], tri_coords[i, :, :][1, 1],
-                            tri_coords[i, :, :][2, 0], tri_coords[i, :, :][2, 1], c)
-    # Debug print
-    # print i, tri_coords[i, :, :].shape
-  
+    if filled:
+      c = (0, 0, 0, 200)
+      pygame.gfxdraw.filled_trigon(screen,
+                              tri_coords[i, :, :][0, 0], tri_coords[i, :, :][0, 1],
+                              tri_coords[i, :, :][1, 0], tri_coords[i, :, :][1, 1],
+                              tri_coords[i, :, :][2, 0], tri_coords[i, :, :][2, 1], c_const_list[i])
+      #pygame.gfxdraw.aatrigon(screen,
+      #                        tri_coords[i, :, :][0, 0], tri_coords[i, :, :][0, 1],
+      #                        tri_coords[i, :, :][1, 0], tri_coords[i, :, :][1, 1],
+      #                        tri_coords[i, :, :][2, 0], tri_coords[i, :, :][2, 1], c)
+      pygame.gfxdraw.aatrigon(screen,
+                              tri_coords[i, :, :][0, 0], tri_coords[i, :, :][0, 1],
+                              tri_coords[i, :, :][1, 0], tri_coords[i, :, :][1, 1],
+                              tri_coords[i, :, :][2, 0], tri_coords[i, :, :][2, 1], c_const_list[i])
+    else:
+      c = (255, 255, 255, 255)
+      pygame.gfxdraw.aatrigon(screen,
+                              tri_coords[i, :, :][0, 0], tri_coords[i, :, :][0, 1],
+                              tri_coords[i, :, :][1, 0], tri_coords[i, :, :][1, 1],
+                              tri_coords[i, :, :][2, 0], tri_coords[i, :, :][2, 1], c)
+      # Debug print
+      # print i, tri_coords[i, :, :].shape
+
   pygame.display.flip()
   
   for event in pygame.event.get():
