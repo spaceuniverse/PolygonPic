@@ -14,14 +14,19 @@ Dependencies:
 
 - numpy;
 
-Example of work (skeleton):
+Example of work:
 
-https://github.com/spaceuniverse/PolygonPic/blob/master/media/screen.png
+https://github.com/spaceuniverse/PolygonPic/blob/master/screen.png
 
+https://github.com/spaceuniverse/PolygonPic/blob/master/images/4screen.png
+
+Skeleton:
+
+https://github.com/spaceuniverse/PolygonPic/blob/master/images2/screen_f2.png
 
 -----------------------------------------------------------------------
 
-References for usage examples:
+References for inspiration:
 
 http://freebietextures.tumblr.com/
 
